@@ -24,4 +24,24 @@ pd.DataFrame.from_dict(json_data)
 
 
 def ven(ticker):
-    return pd.DataFrame.from_dict(requests.get(base_url + version + "/stock/" + ticker + "/volume-by-venue").json())
+    """Get volume-by-venue for ticker"""
+    tmp = pd.DataFrame.from_dict(requests.get(base_url + version + "/stock/" + ticker + "/volume-by-venue").json())
+    tmp["Ticker"] = ticker
+    return tmp
+
+def one_day(ticker):
+    """Get 1 minute data for the last day""" 
+    tmp = pd.DataFrame.from_dict(requests.get(base_url + version + "/stock/" + ticker + "/chart/1d").json())
+    tmp["Ticker"] = ticker
+    return tmp
+
+def symbols_list():
+    tmp = pd.DataFrame.from_dict(requests.get(base_url + version + "/ref-data/symbols").json())
+    return tmp
+
+sym = symbols_list()
+## then can get a list of tickers via sym["symbols"]
+
+def book(ticker):
+    tmp = pd.DataFrame.from_dict(requests.get(base_url + version + "/deep?symbols=" + ticker).json())
+    return tmp
